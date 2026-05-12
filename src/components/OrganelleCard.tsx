@@ -32,7 +32,10 @@ export default function OrganelleCard() {
       >
         {organelle && (
           <div className="organelle-sheet__inner">
-            <div className="organelle-sheet__handle" />
+            <div className="organelle-sheet__sticky-header">
+              <div className="organelle-sheet__handle" />
+            </div>
+            <div className="organelle-sheet__content">
 
             <div className="organelle-sheet__header">
               <div className="organelle-sheet__title-group">
@@ -82,6 +85,7 @@ export default function OrganelleCard() {
                 <Bug size={11} />
                 প্রাণী কোষ
               </div>
+            </div>
             </div>
           </div>
         )}

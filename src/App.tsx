@@ -5,8 +5,11 @@ import './styles/sim.css';
 
 import TextbookDiagram from './components/TextbookDiagram';
 import OrganelleCard from './components/OrganelleCard';
+import GuidedTour from './components/GuidedTour';
+import HelpModal from './components/HelpModal';
 import { useSimStore } from './store/simStore';
 import { ORGANELLES, ORGANELLE_MAP } from './data/organelles';
+import { PlayCircle, HelpCircle } from 'lucide-react';
 
 type CellView = 'both' | 'plant' | 'animal';
 
@@ -18,6 +21,14 @@ export default function App() {
 
   const [showTip, setShowTip] = useState(true);
   const [showLegend, setShowLegend] = useState(false);
+  const [showTour, setShowTour] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
+
+  useEffect(() => {
+    // Show guide modal on every load
+    const t = setTimeout(() => setShowHelp(true), 1200);
+    return () => clearTimeout(t);
+  }, []);
 
   useEffect(() => {
     const t = setTimeout(() => setShowTip(false), 5000);
@@ -30,17 +41,18 @@ export default function App() {
       {/* Header */}
       <header className="sim-header">
         <div className="sim-header__brand">
-          <BookOpen size={18} className="brand-icon" />
-          <div>
-            <span className="brand-name bn">উদ্ভিদ ও প্রাণী কোষের তুলনা</span>
-            <span className="brand-subtitle bn">ইন্টারেক্টিভ সিমুলেটর · Class 6–SSC</span>
-          </div>
+          <img 
+            src="https://cdn.10minuteschool.com/images/svg/Origin%20Labs%20Black.svg" 
+            alt="Origin Labs Logo" 
+            className="brand-logo"
+            loading="lazy"
+          />
         </div>
 
         <div className="sim-header__actions">
 
           {/* Cell selection */}
-          <div className="view-toggle" role="group" aria-label="কোষের দৃশ্য">
+          <div className="view-toggle" role="group" aria-label="কোষের দৃশ্য" id="view-toggle-tour">
             <button
               className={`view-tab ${cellView === 'plant' ? 'view-tab--active' : ''}`}
               onClick={() => setCellView('plant')}
@@ -50,20 +62,20 @@ export default function App() {
               <span className="bn">উদ্ভিদ</span>
             </button>
             <button
-              className={`view-tab view-tab--both ${cellView === 'both' ? 'view-tab--active' : ''}`}
-              onClick={() => setCellView('both')}
-              aria-pressed={cellView === 'both'}
-            >
-              <Layers size={14} />
-              <span className="bn">উভয়</span>
-            </button>
-            <button
               className={`view-tab ${cellView === 'animal' ? 'view-tab--active' : ''}`}
               onClick={() => setCellView('animal')}
               aria-pressed={cellView === 'animal'}
             >
               <Bug size={14} />
               <span className="bn">প্রাণী</span>
+            </button>
+            <button
+              className={`view-tab view-tab--both ${cellView === 'both' ? 'view-tab--active' : ''}`}
+              onClick={() => setCellView('both')}
+              aria-pressed={cellView === 'both'}
+            >
+              <Layers size={14} />
+              <span className="bn">উভয়</span>
             </button>
           </div>
 
@@ -72,24 +84,38 @@ export default function App() {
             onClick={() => setShowLegend(!showLegend)}
             aria-label="অর্গানেল তালিকা"
             aria-expanded={showLegend}
+            id="legend-btn-tour"
           >
             <span className="bn">তালিকা</span>
+          </button>
+
+          <button
+            className="tutorial-btn"
+            onClick={() => setShowTour(true)}
+            aria-label="টিউটোরিয়াল শুরু করুন"
+          >
+            <PlayCircle size={14} className="text-emerald-400" />
+            <span className="bn">টিউটোরিয়াল</span>
+          </button>
+
+          <button
+            className="help-circle-btn"
+            onClick={() => setShowHelp(true)}
+            aria-label="নির্দেশিকা দেখুন"
+          >
+            <HelpCircle size={18} />
           </button>
         </div>
       </header>
 
       {/* Canvas / Diagram area */}
-      <main className="sim-main sim-main--textbook">
+      <main className={`sim-main sim-main--textbook ${selectedOrganelle ? 'sim-main--sheet-open' : ''}`} id="diagram-area-tour">
             <div className={`textbook-grid textbook-grid--${cellView}`}>
               {(cellView === 'both' || cellView === 'plant') && (
-                <div className="diagram-frame">
-                  <TextbookDiagram cell="plant" />
-                </div>
+                <TextbookDiagram cell="plant" />
               )}
               {(cellView === 'both' || cellView === 'animal') && (
-                <div className="diagram-frame">
-                  <TextbookDiagram cell="animal" />
-                </div>
+                <TextbookDiagram cell="animal" />
               )}
           </div>
 
@@ -114,6 +140,13 @@ export default function App() {
       </main>
 
       <OrganelleCard />
+      <GuidedTour isOpen={showTour} onClose={() => setShowTour(false)} />
+      <HelpModal 
+        isOpen={showHelp} 
+        onClose={() => setShowHelp(false)} 
+        onStartTour={() => setShowTour(true)}
+        onSelectView={(view) => setCellView(view)}
+      />
     </div>
   );
 }
