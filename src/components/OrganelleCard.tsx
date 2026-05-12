@@ -3,18 +3,6 @@ import { X, Leaf, Bug } from 'lucide-react';
 import { ORGANELLE_MAP } from '../data/organelles';
 import { useSimStore } from '../store/simStore';
 
-const importanceLabel: Record<string, string> = {
-  high: 'উচ্চ গুরুত্ব',
-  medium: 'মধ্যম গুরুত্ব',
-  low: 'স্বল্প গুরুত্ব',
-};
-
-const importanceStyle: Record<string, string> = {
-  high: 'badge-high',
-  medium: 'badge-medium',
-  low: 'badge-low',
-};
-
 export default function OrganelleCard() {
   const { selectedOrganelle, setSelectedOrganelle } = useSimStore();
   const organelle = selectedOrganelle ? ORGANELLE_MAP.get(selectedOrganelle) : null;
@@ -50,7 +38,7 @@ export default function OrganelleCard() {
               <div className="organelle-sheet__title-group">
                 <span
                   className="organelle-color-dot"
-                  style={{ background: organelle.color }}
+                  style={{ background: '#10b981' }}
                   aria-hidden="true"
                 />
                 <div>
@@ -67,23 +55,30 @@ export default function OrganelleCard() {
               </button>
             </div>
 
-            <p className="organelle-function bn">{organelle.functionBn}</p>
+            <div className="mb-4">
+              <strong className="text-slate-800 text-sm font-black mb-2 block">বিবরণ:</strong>
+              <ul className="list-disc pl-5 text-slate-600 space-y-1.5 text-sm">
+                {organelle.description.map((desc, i) => (
+                  <li key={i}>{desc}</li>
+                ))}
+              </ul>
+            </div>
 
-            <div className="organelle-sheet__chips">
-              <span className={`badge ${importanceStyle[organelle.importance]}`}>
-                {importanceLabel[organelle.importance]}
-              </span>
-              {organelle.examTip && (
-                <span className="exam-chip">{organelle.examTip}</span>
-              )}
+            <div className="mb-6">
+              <strong className="text-slate-800 text-sm font-black mb-2 block">কাজ:</strong>
+              <ul className="list-disc pl-5 text-slate-600 space-y-1.5 text-sm">
+                {organelle.function.map((fn, i) => (
+                  <li key={i}>{fn}</li>
+                ))}
+              </ul>
             </div>
 
             <div className="organelle-present">
-              <div className={`present-tag ${organelle.presentInPlant ? 'present-tag--yes' : 'present-tag--no'}`}>
+              <div className={`present-tag ${organelle.presentIn.includes('plant') ? 'present-tag--yes' : 'present-tag--no'}`}>
                 <Leaf size={11} />
                 উদ্ভিদ কোষ
               </div>
-              <div className={`present-tag ${organelle.presentInAnimal ? 'present-tag--yes' : 'present-tag--no'}`}>
+              <div className={`present-tag ${organelle.presentIn.includes('animal') ? 'present-tag--yes' : 'present-tag--no'}`}>
                 <Bug size={11} />
                 প্রাণী কোষ
               </div>

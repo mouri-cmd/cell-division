@@ -1,6 +1,10 @@
 import { useSimStore } from '../store/simStore';
 import { ORGANELLE_MAP } from '../data/organelles';
 
+// Importing images from the assets folder
+import plantCellImg from '../assets/plant_cell.png';
+import animalCellImg from '../assets/animal_cell.png';
+
 interface Props {
   cell: 'animal' | 'plant';
 }
@@ -24,43 +28,39 @@ interface InnerProps {
   handleClick: (id: string) => void;
 }
 
-// ── ANIMAL CELL (Living Model) ────────────────────────────────────────────────
+const activeColor = '#10b981';
+
+export const animalLabels = [
+    { id: 'nucleus', x: 400, y: 300, lx: 120, ly: 300, anchor: 'end' },
+    { id: 'mitochondria', x: 420, y: 100, lx: 140, ly: 100, anchor: 'end' },
+    { id: 'er', x: 400, y: 480, lx: 140, ly: 500, anchor: 'end' },
+    { id: 'cytoplasm', x: 200, y: 200, lx: 660, ly: 100, anchor: 'start' },
+    { id: 'golgi', x: 600, y: 280, lx: 680, ly: 280, anchor: 'start' },
+    { id: 'lysosome', x: 200, y: 450, lx: 660, ly: 500, anchor: 'start' }
+  ];
 
 function AnimalDiagram({ highlight, handleEnter, handleLeave, handleClick }: InnerProps) {
-  const animalLabels = [
-    { id: 'nucleus', x: 300, y: 300, lx: 100, ly: 100, anchor: 'end' },
-    { id: 'mitochondria', x: 400, y: 150, lx: 100, ly: 250, anchor: 'end' },
-    { id: 'er', x: 320, y: 420, lx: 100, ly: 450, anchor: 'end' },
-    { id: 'cytoplasm', x: 200, y: 200, lx: 700, ly: 100, anchor: 'start' },
-    { id: 'golgi', x: 180, y: 350, lx: 700, ly: 280, anchor: 'start' },
-    { id: 'lysosome', x: 480, y: 300, lx: 700, ly: 450, anchor: 'start' }
-  ];
 
   return (
     <div className="relative w-full h-full flex flex-col items-center justify-center p-4">
-      <div className="text-center mb-6">
-        <h2 className="diagram-title text-4xl font-black text-slate-800 tracking-tight">প্রাণী কোষ</h2>
-        <p className="diagram-subtitle text-slate-400 font-bold uppercase tracking-[0.2em] text-xs">Animal Cell (Living Model)</p>
+      <div className="text-center mb-6 md:mb-10">
+        <h2 className="diagram-title text-3xl md:text-5xl font-black text-slate-800 tracking-tight">প্রাণী কোষ</h2>
+        <p className="diagram-subtitle text-[10px] md:text-xs text-slate-400 font-bold uppercase tracking-[0.2em]">Animal Cell Anatomy</p>
       </div>
 
-      <div className="relative w-full max-w-[850px] aspect-[800/600] bg-white rounded-[2.5rem] shadow-2xl border border-slate-100">
+      <div className="relative w-full max-w-[850px] aspect-[800/600] bg-white rounded-[2.5rem] shadow-2xl border border-slate-100 px-6 md:px-12">
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none animate-float">
            <div className="animate-breathe w-full h-full flex items-center justify-center">
-             <img src="/assets/animal_cell_3d.png" alt="3D Animal Cell" className="h-[90%] object-contain scale-125 brightness-[1.02]" />
+             <img src={animalCellImg} alt="3D Animal Cell" className="w-full h-full object-contain brightness-[1.02]" />
            </div>
         </div>
 
         <div className="absolute inset-0 w-full h-full pointer-events-none">
-          <div 
-            className="absolute w-32 h-32 rounded-full blur-3xl bg-purple-500/20 mix-blend-screen animate-pulse pointer-events-none"
-            style={{ left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }}
-          />
-
           {animalLabels.map((l) => (
             <HotspotLabel 
               key={l.id} 
               id={l.id} 
-              x={l.x + 100} y={l.y} 
+              x={l.x} y={l.y} 
               labelX={l.lx} labelY={l.ly} 
               anchor={l.anchor}
               active={highlight(l.id)}
@@ -73,44 +73,38 @@ function AnimalDiagram({ highlight, handleEnter, handleLeave, handleClick }: Inn
   );
 }
 
-// ── PLANT CELL (Living Model) ─────────────────────────────────────────────────
+export const plantLabels = [
+    { id: 'cell_wall', x: 400, y: 40, lx: 120, ly: 100, anchor: 'end' },
+    { id: 'chloroplast', x: 260, y: 160, lx: 120, ly: 300, anchor: 'end' },
+    { id: 'golgi', x: 580, y: 180, lx: 140, ly: 500, anchor: 'end' },
+    { id: 'nucleus', x: 355, y: 310, lx: 680, ly: 150, anchor: 'start' },
+    { id: 'vacuole', x: 520, y: 360, lx: 700, ly: 350, anchor: 'start' },
+    { id: 'er', x: 350, y: 480, lx: 680, ly: 480, anchor: 'start' },
+    { id: 'mitochondria', x: 520, y: 530, lx: 640, ly: 550, anchor: 'start' }
+  ];
 
 function PlantDiagram({ highlight, handleEnter, handleLeave, handleClick }: InnerProps) {
-  const plantLabels = [
-    { id: 'cell_wall', x: 300, y: 60, lx: 100, ly: 80, anchor: 'end' },
-    { id: 'chloroplast', x: 180, y: 300, lx: 100, ly: 250, anchor: 'end' },
-    { id: 'golgi', x: 220, y: 480, lx: 100, ly: 450, anchor: 'end' },
-    { id: 'nucleus', x: 300, y: 220, lx: 700, ly: 100, anchor: 'start' },
-    { id: 'vacuole', x: 450, y: 350, lx: 700, ly: 280, anchor: 'start' },
-    { id: 'er', x: 380, y: 150, lx: 700, ly: 450, anchor: 'start' },
-    { id: 'mitochondria', x: 320, y: 350, lx: 700, ly: 550, anchor: 'start' }
-  ];
 
   return (
     <div className="relative w-full h-full flex flex-col items-center justify-center p-4">
-      <div className="text-center mb-6">
-        <h2 className="diagram-title text-4xl font-black text-emerald-900 tracking-tight">উদ্ভিদ কোষ</h2>
-        <p className="diagram-subtitle text-emerald-600 font-bold uppercase tracking-[0.2em] text-xs">Plant Cell (Living Model)</p>
+      <div className="text-center mb-6 md:mb-10">
+        <h2 className="diagram-title text-3xl md:text-5xl font-black text-emerald-900 tracking-tight">উদ্ভিদ কোষ</h2>
+        <p className="diagram-subtitle text-[10px] md:text-xs text-emerald-600 font-bold uppercase tracking-[0.2em]">Plant Cell Anatomy</p>
       </div>
 
-      <div className="relative w-full max-w-[850px] aspect-[800/600] bg-white rounded-[2.5rem] shadow-2xl border border-slate-100">
+      <div className="relative w-full max-w-[850px] aspect-[800/600] bg-white rounded-[2.5rem] shadow-2xl border border-slate-100 px-6 md:px-12">
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none animate-float">
           <div className="animate-breathe w-full h-full flex items-center justify-center">
-            <img src="/assets/plant_cell_3d.png" alt="3D Plant Cell" className="h-[90%] object-contain scale-110 brightness-[1.02]" />
+            <img src={plantCellImg} alt="3D Plant Cell" className="w-full h-full object-contain brightness-[1.05]" />
           </div>
         </div>
 
         <div className="absolute inset-0 w-full h-full pointer-events-none">
-          <div 
-            className="absolute w-32 h-32 rounded-full blur-3xl bg-orange-500/20 mix-blend-screen animate-pulse pointer-events-none"
-            style={{ left: '50%', top: '35%', transform: 'translate(-50%, -50%)' }}
-          />
-
           {plantLabels.map((l) => (
             <HotspotLabel 
               key={l.id} 
               id={l.id} 
-              x={l.x + 100} y={l.y} 
+              x={l.x} y={l.y} 
               labelX={l.lx} labelY={l.ly} 
               anchor={l.anchor}
               active={highlight(l.id)}
@@ -123,7 +117,7 @@ function PlantDiagram({ highlight, handleEnter, handleLeave, handleClick }: Inne
   );
 }
 
-// ── HOTSPOT LABEL (With Energy Flow) ──────────────────────────────────────────
+// ── HOTSPOT LABEL ─────────────────────────────────────────────────────────────
 
 interface HotspotProps {
   id: string;
@@ -149,51 +143,41 @@ function HotspotLabel({ id, x, y, labelX, labelY, anchor, active, onClick }: Hot
         <line 
           x1={hotspotLeft} y1={hotspotTop} 
           x2={left} y2={top} 
-          stroke={active ? '#22c55e' : 'rgba(0,0,0,0.1)'} 
+          stroke={active ? activeColor : 'rgba(0,0,0,0.06)'} 
           strokeWidth={active ? 2 : 1}
-          strokeDasharray={active ? 'none' : '4 2'}
           className="transition-all duration-700"
         />
-        {active && (
-          <circle r="3" fill="#22c55e">
-            <animateMotion 
-              path={`M ${hotspotLeft} ${hotspotTop} L ${left} ${top}`}
-              dur="1.2s"
-              repeatCount="indefinite"
-            />
-          </circle>
-        )}
+        <circle 
+          cx={left} cy={top} r="2.5" 
+          fill={active ? activeColor : 'rgba(0,0,0,0.06)'} 
+          className="transition-all duration-300"
+        />
       </svg>
 
       <div 
-        className="absolute w-4 h-4 -translate-x-1/2 -translate-y-1/2 pointer-events-auto cursor-pointer group"
+        className="absolute w-3 h-3 -translate-x-1/2 -translate-y-1/2 pointer-events-auto cursor-pointer"
         style={{ left: hotspotLeft, top: hotspotTop }}
         onClick={() => onClick(id)}
       >
-        <div className={`w-full h-full rounded-full border-2 transition-all duration-300 ${active ? 'bg-[#22c55e] border-white scale-150 rotate-[360deg]' : 'bg-transparent border-[#22c55e] opacity-60 group-hover:opacity-100 group-hover:scale-110'}`} />
-        <div className={`absolute inset-0 rounded-full bg-[#22c55e] animate-ping opacity-30 ${active ? 'block' : 'hidden'}`} />
+        <div className={`w-full h-full rounded-full border-2 transition-all duration-300 ${active ? 'bg-white border-4' : 'bg-transparent border-slate-300 opacity-40'}`} style={{ borderColor: active ? activeColor : 'rgba(0,0,0,0.1)' }} />
       </div>
 
       <div 
-        className={`absolute pointer-events-auto cursor-pointer transition-all duration-700 ${anchor === 'end' ? '-translate-x-full pr-6' : 'pl-6'}`}
-        style={{ left, top, transform: `translate(${anchor === 'end' ? '-100%' : '0%'}, -50%) ${active ? 'scale(1.05)' : 'scale(1)'}` }}
+        className={`absolute pointer-events-auto cursor-pointer transition-all duration-500 flex flex-col ${anchor === 'end' ? 'items-end -translate-x-full pr-4' : 'items-start pl-4'}`}
+        style={{ left, top, transform: `translate(${anchor === 'end' ? '-100%' : '0%'}, -50%) ${active ? 'scale(1.1)' : 'scale(1)'}` }}
         onClick={() => onClick(id)}
       >
-        <div className={`
-          flex flex-col items-center text-center p-2.5 rounded-xl backdrop-blur-md border transition-all duration-500 min-w-[100px] whitespace-nowrap
-          ${active 
-            ? 'bg-slate-800 text-white border-[#22c55e] shadow-[0_20px_50px_rgba(34,197,94,0.4)]' 
-            : 'bg-slate-900/90 text-white border-white/10 hover:border-white/30'
-          }
-        `}>
-          <div className="flex flex-col items-center gap-1 mb-0.5">
-            <div className={`w-1.5 h-1.5 rounded-full ${active ? 'bg-[#22c55e] animate-pulse shadow-[0_0_8px_#22c55e]' : 'bg-[#22c55e]/50'}`} />
-            <span className="text-sm font-black text-white bn leading-none">{org.nameBn}</span>
-          </div>
-          <span className={`text-[9px] font-bold uppercase tracking-[0.15em] ${active ? 'text-[#22c55e]' : 'text-slate-400'}`}>
-            {org.nameEn}
+        <div className="flex flex-col leading-tight">
+          <span className={`text-[10px] md:text-[12px] transition-all duration-300 ${active ? 'font-black scale-105' : 'font-bold opacity-80'}`} style={{ color: active ? activeColor : '#334155' }}>
+            {org.nameBn}
+          </span>
+          <span className={`text-[7px] md:text-[9px] transition-all duration-300 ${active ? 'font-black text-slate-700' : 'font-medium text-slate-400'}`}>
+            ({org.nameEn})
           </span>
         </div>
+        {active && (
+           <div className="h-0.5 w-full mt-0.5 rounded-full" style={{ backgroundColor: activeColor }} />
+        )}
       </div>
     </div>
   );

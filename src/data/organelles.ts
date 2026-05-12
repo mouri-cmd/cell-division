@@ -2,209 +2,172 @@ export interface Organelle {
   id: string;
   nameBn: string;
   nameEn: string;
-  functionBn: string;
-  importance: 'high' | 'medium' | 'low';
-  examTip: string | null;
-  presentInAnimal: boolean;
-  presentInPlant: boolean;
-  color: string;
-  glowColor: string;
+  description: string[];
+  presentIn: ('plant' | 'animal')[];
+  function: string[];
 }
 
 export const ORGANELLES: Organelle[] = [
   {
-    id: 'cell_membrane',
-    nameBn: 'কোষ ঝিল্লি',
-    nameEn: 'Cell Membrane',
-    functionBn: 'কোষ ঝিল্লি কোষের বাইরের সীমানা। ফসফোলিপিড দ্বিস্তর দিয়ে তৈরি এই ঝিল্লি নির্বাচনীভাবে পদার্থ প্রবেশ ও বের হতে দেয়। উভয় কোষেই থাকে।',
-    importance: 'high',
-    examTip: 'বোর্ড পরীক্ষায় আসে',
-    presentInAnimal: true,
-    presentInPlant: true,
-    color: '#60a5fa',
-    glowColor: '#3b82f6',
-  },
-  {
     id: 'cell_wall',
-    nameBn: 'কোষপ্রাচীর',
+    nameBn: 'কোষ প্রাচীর',
     nameEn: 'Cell Wall',
-    functionBn: 'কোষপ্রাচীর শুধু উদ্ভিদ কোষে থাকে। সেলুলোজ দিয়ে তৈরি এই শক্ত দেয়াল কোষকে আকৃতি ও সুরক্ষা দেয় এবং অতিরিক্ত পানি শোষণ থেকে রক্ষা করে।',
-    importance: 'high',
-    examTip: 'SSC MCQ-তে আসে',
-    presentInAnimal: false,
-    presentInPlant: true,
-    color: '#16a34a',
-    glowColor: '#22c55e',
-  },
-  {
-    id: 'vacuole',
-    nameBn: 'কোষগহ্বর',
-    nameEn: 'Vacuole',
-    functionBn: 'উদ্ভিদ কোষের কেন্দ্রীয় কোষগহ্বর (ভ্যাকুওল) পূর্ণবয়স্ক কোষের ৯০% জায়গা নেয়। এটি পানি সংরক্ষণ করে টার্গর চাপে কোষকে দৃঢ় রাখে।',
-    importance: 'high',
-    examTip: 'SSC MCQ-তে আসে',
-    presentInAnimal: false,
-    presentInPlant: true,
-    color: '#7dd3fc',
-    glowColor: '#38bdf8',
-  },
-  {
-    id: 'chloroplast',
-    nameBn: 'ক্লোরোপ্লাস্ট',
-    nameEn: 'Chloroplast',
-    functionBn: 'ক্লোরোপ্লাস্ট সালোকসংশ্লেষণের স্থান — শুধু উদ্ভিদ কোষে থাকে। এটি সূর্যের আলো ব্যবহার করে CO₂ ও পানি থেকে গ্লুকোজ ও অক্সিজেন তৈরি করে।',
-    importance: 'high',
-    examTip: 'SSC MCQ-তে আসে',
-    presentInAnimal: false,
-    presentInPlant: true,
-    color: '#4ade80',
-    glowColor: '#22c55e',
-  },
-  {
-    id: 'peroxisome',
-    nameBn: 'পারক্সিসোম',
-    nameEn: 'Peroxisome',
-    functionBn: 'পারক্সিসোম ক্ষুদ্র অর্গানেল যা ফ্যাটি অ্যাসিড ভাঙে এবং হাইড্রোজেন পারঅক্সাইড (H₂O₂) নিষ্ক্রিয় করে। উদ্ভিদে সালোকশ্বসনে সহায়তা করে।',
-    importance: 'medium',
-    examTip: null,
-    presentInAnimal: false,
-    presentInPlant: true,
-    color: '#f472b6',
-    glowColor: '#ec4899',
-  },
-  {
-    id: 'nucleus',
-    nameBn: 'নিউক্লিয়াস',
-    nameEn: 'Nucleus',
-    functionBn: 'নিউক্লিয়াস কোষের নিয়ন্ত্রণ কেন্দ্র। DNA ধারণ করে এবং কোষের সমস্ত কার্যক্রম নিয়ন্ত্রণ করে। বংশগত তথ্য সংরক্ষণ ও প্রোটিন সংশ্লেষণের নির্দেশনা দেয়।',
-    importance: 'high',
-    examTip: 'SSC MCQ-তে আসে',
-    presentInAnimal: true,
-    presentInPlant: true,
-    color: '#f9a8d4',
-    glowColor: '#ec4899',
-  },
-  {
-    id: 'nucleolus',
-    nameBn: 'নিউক্লিওলাস',
-    nameEn: 'Nucleolus',
-    functionBn: 'নিউক্লিওলাস নিউক্লিয়াসের ভিতরে গাঢ় গোলাকার অঞ্চল। রাইবোসোমের RNA (rRNA) তৈরি হয় এখানে। প্রোটিন সংশ্লেষণের জন্য অপরিহার্য।',
-    importance: 'medium',
-    examTip: 'বোর্ড পরীক্ষায় আসে',
-    presentInAnimal: true,
-    presentInPlant: true,
-    color: '#facc15',
-    glowColor: '#eab308',
+    description: [
+      'উদ্ভিদ কোষের সবচেয়ে বাইরের নির্জীব, শক্ত ও পুরু আবরণ।',
+      'এটি প্রধানত সেলুলোজ, হেমিসেলুলোজ এবং পেকটিন দিয়ে তৈরি।',
+      'প্রাণী কোষে কোষ প্রাচীর থাকে না।'
+    ],
+    presentIn: ['plant'],
+    function: [
+      'কোষের নির্দিষ্ট আকৃতি প্রদান করে এবং অভ্যন্তরীণ অংশগুলোকে রক্ষা করে।',
+      'প্রতিকূল পরিবেশে কোষকে শুকিয়ে যাওয়ার হাত থেকে রক্ষা করে।',
+      'পার্শ্ববর্তী কোষগুলোর সাথে প্লাজমোডেসমাটা (Plasmodesmata)-এর মাধ্যমে যোগাযোগ রক্ষা করে।'
+    ]
   },
   {
     id: 'cytoplasm',
     nameBn: 'সাইটোপ্লাজম',
     nameEn: 'Cytoplasm',
-    functionBn: 'সাইটোপ্লাজম কোষের ভেতরের তরল পদার্থ। সব অর্গানেল এখানে ভাসমান থাকে। বিভিন্ন বিপাক ক্রিয়া যেমন গ্লাইকোলাইসিস এখানেই ঘটে।',
-    importance: 'medium',
-    examTip: null,
-    presentInAnimal: true,
-    presentInPlant: true,
-    color: '#fde68a',
-    glowColor: '#fbbf24',
+    description: [
+      'কোষঝিল্লির ভেতরে এবং নিউক্লিয়াসের বাইরে অবস্থিত অর্ধস্বচ্ছ, দানাদার ও জেলির মতো তরল পদার্থ।',
+      'এর প্রধান উপাদান পানি, তবে এতে প্রোটিন, লিপিড এবং শর্করা দ্রবীভূত থাকে।',
+      'সব ধরনের কোষীয় অঙ্গাণু এই সাইটোপ্লাজমের ভেতরেই ভাসমান অবস্থায় থাকে।'
+    ],
+    presentIn: ['plant', 'animal'],
+    function: [
+      'কোষের বিভিন্ন অঙ্গাণু ধারণ করে।',
+      'কোষের অধিকাংশ বিপাকীয় কাজ (যেমন: গ্লাইকোলাইসিস) এখানে সম্পন্ন হয়।',
+      'কোষের আকৃতি ঠিক রাখতে সাহায্য করে।'
+    ]
+  },
+  {
+    id: 'nucleus',
+    nameBn: 'নিউক্লিয়াস',
+    nameEn: 'Nucleus',
+    description: [
+      'কোষের কেন্দ্রস্থলে অবস্থিত দ্বিস্তরী আবরণীযুক্ত, গোলাকার এবং সর্বাপেক্ষা ঘন অঙ্গাণু।',
+      'এর প্রধান অংশগুলো হলো: নিউক্লিয়ার মেমব্রেন, নিউক্লিওপ্লাজম, নিউক্লিওলাস এবং ক্রোমাটিন তন্তু।',
+      'স্তন্যপায়ী প্রাণীর পরিণত লোহিত রক্তকণিকায় নিউক্লিয়াস থাকে না।'
+    ],
+    presentIn: ['plant', 'animal'],
+    function: [
+      'কোষের সমস্ত বিপাকীয় এবং শারীরবৃত্তীয় কাজ নিয়ন্ত্রণ করে।',
+      'ক্রোমাটিন তন্তুর মাধ্যমে বংশগতির বৈশিষ্ট্য (DNA) এক প্রজন্ম থেকে অন্য প্রজন্মে বহন করে।',
+      'কোষ বিভাজনে সরাসরি ভূমিকা পালন করে।'
+    ]
+  },
+  {
+    id: 'rer',
+    nameBn: 'রাফ এন্ডোপ্লাজমিক রেটিকুলাম',
+    nameEn: 'Rough ER',
+    description: [
+      'এন্ডোপ্লাজমিক রেটিকুলামের যে অংশের বাইরের গায়ে রাইবোসোম (Ribosome) যুক্ত থাকে।',
+      'রাইবোসোম থাকার কারণে একে অমসৃণ বা রাফ দেখায়।',
+      'এটি সাধারণত নিউক্লিয়াসের কাছাকাছি অবস্থান করে।'
+    ],
+    presentIn: ['plant', 'animal'],
+    function: [
+      'রাইবোসোমগুলোর সাহায্যে প্রোটিন সংশ্লেষণ করে।',
+      'তৈরিকৃত প্রোটিন গলজি বডিতে প্রেরণ করে।',
+      'কোষের অভ্যন্তরীণ কাঠামো বা কঙ্কাল হিসেবে কাজ করে।'
+    ]
+  },
+  {
+    id: 'ser',
+    nameBn: 'স্মুথ এন্ডোপ্লাজমিক রেটিকুলাম',
+    nameEn: 'Smooth ER',
+    description: [
+      'এন্ডোপ্লাজমিক জালিকার যে অংশের গায়ে রাইবোসোম যুক্ত থাকে না।',
+      'রাইবোসোম না থাকায় এর পৃষ্ঠভাগ মসৃণ হয়।',
+      'এটি মূলত লিপিড ও স্টেরয়েড উৎপাদনকারী কোষে বেশি দেখা যায়।'
+    ],
+    presentIn: ['plant', 'animal'],
+    function: [
+      'লিপিড (চর্বি) এবং স্টেরয়েড হরমোন সংশ্লেষণ করে।',
+      'কোষের বিষাক্ত পদার্থ এবং ওষুধ নিরাময়ে (Detoxification) সাহায্য করে।',
+      'পেশিকোষে ক্যালসিয়াম আয়ন সঞ্চয় করে।'
+    ]
   },
   {
     id: 'mitochondria',
     nameBn: 'মাইটোকন্ড্রিয়া',
-    nameEn: 'Mitochondria',
-    functionBn: 'মাইটোকন্ড্রিয়াকে কোষের "শক্তি কেন্দ্র" বলা হয়। অক্সিজেন ব্যবহার করে খাদ্য থেকে ATP শক্তি উৎপাদন করে। কোষের সব কাজের জন্য এই শক্তি প্রয়োজন।',
-    importance: 'high',
-    examTip: 'SSC MCQ-তে আসে',
-    presentInAnimal: true,
-    presentInPlant: true,
-    color: '#ef4444',
-    glowColor: '#dc2626',
+    nameEn: 'Mitochondrion',
+    description: [
+      'দুই স্তরবিশিষ্ট আবরণী দ্বারা ঘেরা কোষের একটি গুরুত্বপূর্ণ অঙ্গাণু।',
+      'এর ভেতরের স্তরটি ভাঁজ হয়ে থাকে, যাকে ক্রিস্টি (Cristae) বলা হয়।',
+      'এদের নিজস্ব DNA এবং রাইবোসোম থাকে, ফলে এরা নিজেদের প্রোটিন নিজেরাই তৈরি করতে পারে।'
+    ],
+    presentIn: ['plant', 'animal'],
+    function: [
+      'শ্বসন প্রক্রিয়ার মাধ্যমে কোষের জন্য প্রয়োজনীয় শক্তি (ATP) উৎপাদন করে।',
+      'শক্তি উৎপাদনের কারণে একে কোষের "পাওয়ার হাউস" (Power House) বলা হয়।',
+      'কোষের ক্যালসিয়াম আয়নের ঘনত্ব নিয়ন্ত্রণ করে।'
+    ]
   },
   {
-    id: 'ribosome',
-    nameBn: 'রাইবোজোম',
-    nameEn: 'Ribosome',
-    functionBn: 'রাইবোজোম প্রোটিন তৈরির কারখানা। mRNA-এর নির্দেশনা অনুসরণ করে অ্যামিনো অ্যাসিড যুক্ত করে প্রোটিন তৈরি করে। উভয় কোষেই থাকে।',
-    importance: 'high',
-    examTip: 'বোর্ড পরীক্ষায় আসে',
-    presentInAnimal: true,
-    presentInPlant: true,
-    color: '#a855f7',
-    glowColor: '#9333ea',
+    id: 'chloroplast',
+    nameBn: 'ক্লোরোপ্লাস্ট',
+    nameEn: 'Chloroplast',
+    description: [
+      'উদ্ভিদ কোষের সবুজ বর্ণের প্লাস্টিড যা পাতায় বেশি থাকে।',
+      'এতে ক্লোরোফিল নামক সবুজ রঞ্জক থাকে, যা পাতার সবুজ রঙের জন্য দায়ী।',
+      'এর ভেতরের চাকতির মতো অংশগুলোকে থাইলাকয়েড (Thylakoid) বলা হয়।'
+    ],
+    presentIn: ['plant'],
+    function: [
+      'সূর্যের আলো ব্যবহার করে সালোকসংশ্লেষণ প্রক্রিয়ায় শর্করা জাতীয় খাদ্য তৈরি করে।',
+      'খাদ্য তৈরি করে বলে একে কোষের "রান্নাঘর" (Kitchen of the cell) বলা হয়।',
+      'বায়ুমণ্ডল থেকে কার্বন ডাই অক্সাইড গ্রহণ করে অক্সিজেন ত্যাগ করতে সাহায্য করে।'
+    ]
   },
   {
-    id: 'rough_er',
-    nameBn: 'অমসৃণ এন্ডোপ্লাজমিক জালিকা',
-    nameEn: 'Rough ER',
-    functionBn: 'অমসৃণ এন্ডোপ্লাজমিক রেটিকুলামের গায়ে রাইবোজোম দানা থাকে। এটি মূলত প্রোটিন সংশ্লেষণ ও পরিবহনে সাহায্য করে।',
-    importance: 'high',
-    examTip: 'বোর্ড পরীক্ষায় আসে',
-    presentInAnimal: true,
-    presentInPlant: true,
-    color: '#3b82f6',
-    glowColor: '#1d4ed8',
-  },
-  {
-    id: 'smooth_er',
-    nameBn: 'মসৃণ এন্ডোপ্লাজমিক জালিকা',
-    nameEn: 'Smooth ER',
-    functionBn: 'মসৃণ এন্ডোপ্লাজমিক রেটিকুলাম লিপিড (চর্বি) এবং হরমোন তৈরিতে কাজ করে। এতে কোনো রাইবোজোম থাকে না।',
-    importance: 'high',
-    examTip: 'বোর্ড পরীক্ষায় আসে',
-    presentInAnimal: true,
-    presentInPlant: true,
-    color: '#a855f7',
-    glowColor: '#9333ea',
+    id: 'vacuole',
+    nameBn: 'ভ্যাকুইল',
+    nameEn: 'Vacuole',
+    description: [
+      'কোষের সাইটোপ্লাজমে অবস্থিত তরল পদার্থ পূর্ণ একটি বিশাল গহ্বর।',
+      'উদ্ভিদ কোষে এটি অনেক বড় হয় এবং কোষের কেন্দ্র দখল করে থাকে।',
+      'প্রাণী কোষে এটি সাধারণত থাকে না, থাকলেও খুব ছোট আকারের হয়।'
+    ],
+    presentIn: ['plant', 'animal'],
+    function: [
+      'কোষরস (Cell sap) ধারণ করে এবং কোষের পানির চাপ (Turgor pressure) বজায় রাখে।',
+      'অপ্রয়োজনীয় বর্জ্য পদার্থ এবং অতিরিক্ত পানি সঞ্চয় করে রাখে।',
+      'কোষের পিএইচ (pH) ব্যালেন্স ঠিক রাখতে সাহায্য করে।'
+    ]
   },
   {
     id: 'golgi',
-    nameBn: 'গলগি বডি',
-    nameEn: 'Golgi Apparatus',
-    functionBn: 'গলগি বডি কোষের প্যাকেজিং ও ডেলিভারি সেন্টার। ER থেকে প্রোটিন ও লিপিড গ্রহণ করে প্যাকেজ করে বাইরে পাঠায় বা লাইসোজোম তৈরি করে।',
-    importance: 'high',
-    examTip: 'বোর্ড পরীক্ষায় আসে',
-    presentInAnimal: true,
-    presentInPlant: true,
-    color: '#f97316',
-    glowColor: '#ea580c',
-  },
-  {
-    id: 'amyloplast',
-    nameBn: 'অ্যামাইলোপ্লাস্ট',
-    nameEn: 'Amyloplast',
-    functionBn: 'অ্যামাইলোপ্লাস্ট এক ধরনের লিউকোপ্লাস্ট যা উদ্ভিদে শর্করা বা স্টার্চ সঞ্চয় করে রাখে। এটি বর্ণহীন এবং সাধারণত মূলে থাকে।',
-    importance: 'medium',
-    examTip: null,
-    presentInAnimal: false,
-    presentInPlant: true,
-    color: '#c084fc',
-    glowColor: '#a855f7',
+    nameBn: 'গলজি বডি',
+    nameEn: 'Golgi Body',
+    description: [
+      'নিউক্লিয়াসের কাছাকাছি অবস্থিত থলির মতো চ্যাপ্টা আকৃতির আবরণীযুক্ত অঙ্গাণু।',
+      'ইতালীয় বিজ্ঞানী ক্যামিলো গলজি এর আবিষ্কারক।',
+      'এগুলো স্তরে স্তরে সাজানো থাকে এবং এদের চারপাশে ছোট ছোট ভেসিকল দেখা যায়।'
+    ],
+    presentIn: ['plant', 'animal'],
+    function: [
+      'এন্ডোপ্লাজমিক জালিকা থেকে আসা প্রোটিন ও লিপিডকে প্যাকেজিং করে সঠিক গন্তব্যে পাঠায়।',
+      'এজন্য একে কোষের "ট্রাফিক পুলিশ" বা "প্যাকেজিং সেন্টার" বলা হয়।',
+      'কিছু এনজাইম এবং কার্বোহাইড্রেট নিঃসরণ করে।'
+    ]
   },
   {
     id: 'lysosome',
     nameBn: 'লাইসোসোম',
     nameEn: 'Lysosome',
-    functionBn: 'লাইসোসোম কোষে হজম এনজাইম ধারণ করে। এটি মৃত কোষ বা বাইরের জীবাণু ধ্বংস করে কোষকে পরিষ্কার রাখে।',
-    importance: 'high',
-    examTip: 'বোর্ড পরীক্ষায় আসে',
-    presentInAnimal: true,
-    presentInPlant: true,
-    color: '#fbbf24',
-    glowColor: '#f59e0b',
-  },
-  {
-    id: 'crystal',
-    nameBn: 'ক্যালসিয়াম অক্সালেট কেলাস',
-    nameEn: 'Calcium Oxalate Crystals',
-    functionBn: 'উদ্ভিদ কোষে ড্রুস (Druse) বা র‍্যাফাইড (Raphide) আকারে কেলাস থাকতে পারে। এগুলো বিপাকীয় বর্জ্য এবং সুরক্ষায় সাহায্য করে।',
-    importance: 'low',
-    examTip: null,
-    presentInAnimal: false,
-    presentInPlant: true,
-    color: '#94a3b8',
-    glowColor: '#64748b',
-  },
+    description: [
+      'প্রাণী কোষে পাওয়া যায় এমন একটি গোলাকার, একক আবরণীযুক্ত ক্ষুদ্র থলি।',
+      'এর ভেতরে প্রচুর পরিমাণে শক্তিশালী পরিপাককারী এনজাইম থাকে।',
+      'শ্বেত রক্তকণিকায় এদের প্রচুর পরিমাণে দেখা যায়।'
+    ],
+    presentIn: ['animal'],
+    function: [
+      'বাইরে থেকে আসা রোগ জীবাণু এবং ব্যাকটেরিয়াকে ধ্বংস করে (ফ্যাগোসাইটোসিস)।',
+      'কোষের পুরনো এবং অকেজো অঙ্গাণুগুলোকে হজম করে ফেলে।',
+      'তীব্র খাদ্যাভাবে এরা পুরো কোষটিকেই ধ্বংস করে দিতে পারে, তাই একে "আত্মঘাতী থলিকা" (Suicidal bag) বলা হয়।'
+    ]
+  }
 ];
 
-
-export const ORGANELLE_MAP = new Map(ORGANELLES.map((o) => [o.id, o]));
+export const ORGANELLE_MAP = new Map(ORGANELLES.map(o => [o.id, o]));

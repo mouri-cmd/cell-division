@@ -4,7 +4,6 @@ import gsap from 'gsap';
 import { useSimStore } from '../store/simStore';
 import { createScene, createCamera, createRenderer, createLights } from '../three/CellScene';
 import { buildPlantCell, buildAnimalCell } from '../three/OrganelleMeshes';
-import { ORGANELLE_MAP } from '../data/organelles';
 import TextbookLabels from './TextbookLabels';
 
 interface SceneState {
@@ -31,35 +30,32 @@ export default function SimCanvas() {
   // Init
   useEffect(() => {
     const canvas = canvasRef.current!;
-    const w = canvas.offsetWidth || 600;
-    const h = canvas.offsetHeight || 400;
+    const w = canvas.offsetWidth || 800;
+    const h = canvas.offsetHeight || 600;
 
     const scene = createScene();
+    scene.background = new THREE.Color('#f8fafc'); // Soft off-white
+    
     const camera = createCamera(w, h);
+    camera.position.z = 10; // Slightly further back
     const renderer = createRenderer(canvas);
     renderer.setSize(w, h);
     createLights(scene);
 
-    // Plant cell — left
+    // Plant cell
     const plantGroup = buildPlantCell();
     plantGroup.position.x = -2.8;
     scene.add(plantGroup);
 
-    // Animal cell — right
+    // Animal cell
     const animalGroup = buildAnimalCell();
     animalGroup.position.x = 2.8;
     scene.add(animalGroup);
 
     // Gentle idle rotation
     const orbitTl = gsap.timeline({ repeat: -1 });
-    orbitTl.to(plantGroup.rotation, { y: Math.PI * 2, duration: 28, ease: 'none' });
-    orbitTl.to(animalGroup.rotation, { y: -Math.PI * 2, duration: 28, ease: 'none' }, 0);
-
-    // Intro
-    gsap.from([plantGroup.position, animalGroup.position], {
-      z: -4, opacity: 0, duration: 1.0, ease: 'power2.out', stagger: 0.1,
-    });
-    gsap.from(camera.position, { z: 16, duration: 1.2, ease: 'power2.out' });
+    orbitTl.to(plantGroup.rotation, { y: Math.PI * 2, duration: 25, ease: 'none' });
+    orbitTl.to(animalGroup.rotation, { y: -Math.PI * 2, duration: 25, ease: 'none' }, 0);
 
     state.current = { renderer, scene, camera, plantGroup, animalGroup, ...state.current, orbitTl };
 
@@ -84,10 +80,9 @@ export default function SimCanvas() {
       orbitTl.kill();
       renderer.dispose();
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Respond to cellView changes — show/hide cells and reposition camera
+  // Respond to cellView changes
   useEffect(() => {
     const s = state.current;
     if (!s.plantGroup || !s.animalGroup || !s.camera) return;
@@ -95,98 +90,35 @@ export default function SimCanvas() {
     if (cellView === 'both') {
       s.plantGroup.visible = true;
       s.animalGroup.visible = true;
-      gsap.to(s.plantGroup.position, { x: -2.8, duration: 0.5, ease: 'power2.out' });
-      gsap.to(s.animalGroup.position, { x: 2.8, duration: 0.5, ease: 'power2.out' });
-      gsap.to(s.camera.position, { x: 0, z: 9, duration: 0.5, ease: 'power2.out' });
+      gsap.to(s.plantGroup.position, { x: -2.8, duration: 0.8, ease: 'power3.out' });
+      gsap.to(s.animalGroup.position, { x: 2.8, duration: 0.8, ease: 'power3.out' });
+      gsap.to(s.camera.position, { x: 0, z: 9, duration: 1.0, ease: 'power3.out' });
     } else if (cellView === 'plant') {
       s.plantGroup.visible = true;
       s.animalGroup.visible = false;
-      gsap.to(s.plantGroup.position, { x: 0, duration: 0.5, ease: 'power2.out' });
-      gsap.to(s.camera.position, { x: 0, z: 8, duration: 0.5, ease: 'power2.out' });
+      gsap.to(s.plantGroup.position, { x: 0, duration: 0.8, ease: 'power3.out' });
+      gsap.to(s.camera.position, { x: 0, z: 8, duration: 1.0, ease: 'power3.out' });
     } else {
       s.plantGroup.visible = false;
       s.animalGroup.visible = true;
-      gsap.to(s.animalGroup.position, { x: 0, duration: 0.5, ease: 'power2.out' });
-      gsap.to(s.camera.position, { x: 0, z: 8, duration: 0.5, ease: 'power2.out' });
+      gsap.to(s.animalGroup.position, { x: 0, duration: 0.8, ease: 'power3.out' });
+      gsap.to(s.camera.position, { x: 0, z: 8, duration: 1.0, ease: 'power3.out' });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cellView]);
 
-  // Organelle glow on selection
-  useEffect(() => {
-    const s = state.current;
-    if (!s.plantGroup || !s.animalGroup) return;
-
-    // Reset all glow
-    [s.plantGroup, s.animalGroup].forEach((cell) => {
-      cell.traverse((obj) => {
-        if (obj instanceof THREE.Mesh) {
-          const m = obj.material as THREE.MeshPhongMaterial;
-          m.emissive = new THREE.Color(0x000000);
-          m.emissiveIntensity = 0;
-        }
-      });
-    });
-
-    if (!selectedOrganelle) return;
-
-    const org = ORGANELLE_MAP.get(selectedOrganelle);
-    const glowHex = org?.glowColor ?? '#e8001d';
-
-    [s.plantGroup, s.animalGroup].forEach((cell) => {
-      cell.traverse((obj) => {
-        if (obj instanceof THREE.Mesh && obj.userData.organelleId === selectedOrganelle) {
-          const m = obj.material as THREE.MeshPhongMaterial;
-          m.emissive = new THREE.Color(glowHex);
-          m.emissiveIntensity = 0.7;
-        }
-      });
-    });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedOrganelle]);
-
-  // Raycasting
-  const getHitOrganelle = useCallback((e: React.PointerEvent | React.MouseEvent): string | null => {
-    const s = state.current;
-    if (!s.camera || !s.scene) return null;
-    const rect = canvasRef.current!.getBoundingClientRect();
-    s.mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-    s.mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
-    s.raycaster.setFromCamera(s.mouse, s.camera);
-
-    const meshes: THREE.Mesh[] = [];
-    s.scene.traverse((obj) => {
-      if (obj instanceof THREE.Mesh && obj.userData.organelleId) meshes.push(obj);
-    });
-
-    const hits = s.raycaster.intersectObjects(meshes, false);
-    if (hits.length > 0) return hits[0].object.userData.organelleId as string;
-    return null;
-  }, []);
-
-  const handlePointerDown = useCallback((e: React.PointerEvent) => {
-    const id = getHitOrganelle(e);
-    setSelectedOrganelle(id === selectedOrganelle ? null : id);
-  }, [getHitOrganelle, selectedOrganelle, setSelectedOrganelle]);
-
-  const handleMouseMove = useCallback((e: React.MouseEvent) => {
-    const id = getHitOrganelle(e);
-    setHoveredOrganelle(id);
-    canvasRef.current!.style.cursor = id ? 'pointer' : 'grab';
-  }, [getHitOrganelle, setHoveredOrganelle]);
-
-  // Drag rotate
+  // Handle Rotation
   const dragRef = useRef({ dragging: false, lastX: 0, lastY: 0 });
 
   const onMouseDown = useCallback((e: React.MouseEvent) => {
     dragRef.current = { dragging: true, lastX: e.clientX, lastY: e.clientY };
+    canvasRef.current!.style.cursor = 'grabbing';
   }, []);
 
   const onMouseDrag = useCallback((e: React.MouseEvent) => {
-    if (!dragRef.current.dragging) return handleMouseMove(e);
+    if (!dragRef.current.dragging) return;
     const s = state.current;
-    const dx = (e.clientX - dragRef.current.lastX) * 0.006;
-    const dy = (e.clientY - dragRef.current.lastY) * 0.006;
+    const dx = (e.clientX - dragRef.current.lastX) * 0.008;
+    const dy = (e.clientY - dragRef.current.lastY) * 0.008;
     dragRef.current.lastX = e.clientX;
     dragRef.current.lastY = e.clientY;
 
@@ -194,25 +126,45 @@ export default function SimCanvas() {
     targets.forEach((g) => {
       if (!g.visible) return;
       g.rotation.y += dx;
-      g.rotation.x = Math.max(-0.7, Math.min(0.7, g.rotation.x + dy));
+      g.rotation.x = Math.max(-0.5, Math.min(0.5, g.rotation.x + dy));
     });
-  }, [handleMouseMove]);
+  }, []);
 
-  const onMouseUp = useCallback(() => { dragRef.current.dragging = false; }, []);
+  const onMouseUp = useCallback(() => { 
+    dragRef.current.dragging = false; 
+    canvasRef.current!.style.cursor = 'grab';
+  }, []);
 
   return (
-    <canvas
-      ref={canvasRef}
-      className="sim-canvas"
-      onPointerDown={handlePointerDown}
-      onMouseDown={onMouseDown}
-      onMouseMove={onMouseDrag}
-      onMouseUp={onMouseUp}
-      onMouseLeave={onMouseUp}
-      aria-label="উদ্ভিদ ও প্রাণী কোষ সিমুলেটর"
-      role="img"
-    />
+    <div className="relative w-full h-full bg-white flex flex-col items-center">
+      <div className="flex-1 w-full relative">
+        <canvas
+          ref={canvasRef}
+          className="w-full h-full touch-none cursor-grab"
+          onMouseDown={onMouseDown}
+          onMouseMove={onMouseDrag}
+          onMouseUp={onMouseUp}
+          onMouseLeave={onMouseUp}
+        />
+        
+        {state.current.camera && state.current.scene && (
+          <TextbookLabels 
+            camera={state.current.camera} 
+            scene={state.current.scene} 
+            cellView={cellView} 
+          />
+        )}
+      </div>
+
+      {/* Dynamic Title based on view */}
+      <div className="absolute top-10 left-1/2 -translate-x-1/2 text-center pointer-events-none">
+        <h2 className="text-4xl font-black text-slate-800 tracking-tight">
+          {cellView === 'plant' ? 'উদ্ভিদ কোষ' : cellView === 'animal' ? 'প্রাণী কোষ' : 'উদ্ভিদ ও প্রাণী কোষ'}
+        </h2>
+        <p className="text-slate-400 font-bold uppercase tracking-[0.2em] text-xs">
+          Interactive 360° 3D Models
+        </p>
+      </div>
+    </div>
   );
 }
-
-

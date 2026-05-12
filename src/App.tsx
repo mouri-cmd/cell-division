@@ -3,7 +3,6 @@ import { BookOpen, Info, X, Leaf, Bug, Layers, Box, FileText } from 'lucide-reac
 import './styles/tokens.css';
 import './styles/sim.css';
 
-import SimCanvas from './components/SimCanvas';
 import TextbookDiagram from './components/TextbookDiagram';
 import OrganelleCard from './components/OrganelleCard';
 import { useSimStore } from './store/simStore';
@@ -13,10 +12,8 @@ type CellView = 'both' | 'plant' | 'animal';
 
 export default function App() {
   const {
-    viewMode, setViewMode,
     cellView, setCellView,
     selectedOrganelle, setSelectedOrganelle,
-    hoveredOrganelle,
   } = useSimStore();
 
   const [showTip, setShowTip] = useState(true);
@@ -27,7 +24,6 @@ export default function App() {
     return () => clearTimeout(t);
   }, []);
 
-  const hoveredOrg = hoveredOrganelle ? ORGANELLE_MAP.get(hoveredOrganelle) : null;
 
   return (
     <div className="sim-root">
@@ -42,27 +38,6 @@ export default function App() {
         </div>
 
         <div className="sim-header__actions">
-          {/* View mode toggle */}
-          <div className="view-toggle view-toggle--mode" role="group" aria-label="দৃশ্য মোড">
-            <button
-              className={`view-tab ${viewMode === 'textbook' ? 'view-tab--active-mode' : ''}`}
-              onClick={() => setViewMode('textbook')}
-              aria-pressed={viewMode === 'textbook'}
-              title="পাঠ্যবই ডায়াগ্রাম"
-            >
-              <FileText size={14} />
-              <span className="bn">পাঠ্যবই</span>
-            </button>
-            <button
-              className={`view-tab ${viewMode === '3d' ? 'view-tab--active-mode' : ''}`}
-              onClick={() => setViewMode('3d')}
-              aria-pressed={viewMode === '3d'}
-              title="৩D মডেল"
-            >
-              <Box size={14} />
-              <span>3D</span>
-            </button>
-          </div>
 
           {/* Cell selection */}
           <div className="view-toggle" role="group" aria-label="কোষের দৃশ্য">
@@ -104,28 +79,7 @@ export default function App() {
       </header>
 
       {/* Canvas / Diagram area */}
-      <main className={`sim-main sim-main--${viewMode}`}>
-        {/* Cell indicators (labels) */}
-        {cellView === 'both' && (
-          <div className="cell-labels">
-            <div className="cell-label bn"><Leaf size={13} /> উদ্ভিদ কোষ</div>
-            <div className="cell-label cell-label--right bn"><Bug size={13} /> প্রাণী কোষ</div>
-          </div>
-        )}
-        {cellView === 'plant' && (
-          <div className="cell-labels cell-labels--center">
-            <div className="cell-label bn"><Leaf size={13} /> উদ্ভিদ কোষ</div>
-          </div>
-        )}
-        {cellView === 'animal' && (
-          <div className="cell-labels cell-labels--center">
-            <div className="cell-label bn"><Bug size={13} /> প্রাণী কোষ</div>
-          </div>
-        )}
-
-        {viewMode === '3d' ? (
-          <SimCanvas />
-        ) : (
+      <main className="sim-main sim-main--textbook">
             <div className={`textbook-grid textbook-grid--${cellView}`}>
               {(cellView === 'both' || cellView === 'plant') && (
                 <div className="diagram-frame">
@@ -138,24 +92,12 @@ export default function App() {
                 </div>
               )}
           </div>
-        )}
-
-
-
-        {/* Hover tooltip */}
-        {hoveredOrg && !selectedOrganelle && viewMode === '3d' && (
-          <div className="hover-tooltip bn">
-            <span className="hover-dot" style={{ background: hoveredOrg.color }} />
-            {hoveredOrg.nameBn}
-            <span className="hover-en">{hoveredOrg.nameEn}</span>
-          </div>
-        )}
 
         {/* First-use tip */}
         {showTip && (
           <div className="first-tip bn">
             <Info size={14} />
-            {viewMode === 'textbook' ? 'ছবির যেকোনো অংশে ক্লিক করো বিস্তারিত দেখতে' : 'যেকোনো অর্গানেলে ক্লিক করো'}
+            ছবির যেকোনো অংশে ক্লিক করো বিস্তারিত দেখতে
             <button onClick={() => setShowTip(false)} aria-label="বন্ধ করুন">
               <X size={12} />
             </button>
@@ -171,8 +113,7 @@ export default function App() {
         )}
       </main>
 
-      {viewMode === '3d' && <OrganelleCard />}
-      <ComparisonStrip />
+      <OrganelleCard />
     </div>
   );
 }
@@ -223,33 +164,4 @@ function LegendPanel({
   );
 }
 
-function ComparisonStrip() {
-  const { setSelectedOrganelle, selectedOrganelle } = useSimStore();
 
-  return (
-    <div className="comparison-strip">
-      <div className="comparison-strip__inner">
-        {ORGANELLES.map((org) => {
-          const active = selectedOrganelle === org.id;
-          return (
-            <button
-              key={org.id}
-              className={`comp-chip ${active ? 'comp-chip--active' : ''}`}
-              onClick={() => setSelectedOrganelle(active ? null : org.id)}
-              aria-pressed={active}
-              aria-label={org.nameBn}
-              style={{ '--chip-color': org.color } as React.CSSProperties}
-            >
-              <span className="comp-chip__dot" style={{ background: org.color }} />
-              <span className="bn comp-chip__name">{org.nameBn}</span>
-              <span className="comp-chip__presence">
-                <span className={`pres ${org.presentInPlant ? 'pres--yes' : 'pres--no'}`}>উদ্ভিদ</span>
-                <span className={`pres ${org.presentInAnimal ? 'pres--yes' : 'pres--no'}`}>প্রাণী</span>
-              </span>
-            </button>
-          );
-        })}
-      </div>
-    </div>
-  );
-}

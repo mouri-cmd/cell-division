@@ -16,27 +16,35 @@ export function createRenderer(canvas: HTMLCanvasElement): THREE.WebGLRenderer {
   const renderer = new THREE.WebGLRenderer({
     canvas,
     antialias: true,
-    alpha: false,
-    powerPreference: 'default',
+    alpha: true, // Allow for transparent backgrounds if needed
+    powerPreference: 'high-performance',
   });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.1;
+  renderer.toneMapping = THREE.ReinhardToneMapping;
+  renderer.toneMappingExposure = 1.4;
   return renderer;
 }
 
 export function createLights(scene: THREE.Scene): void {
-  scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+  scene.add(new THREE.AmbientLight(0xffffff, 0.4));
 
-  const key = new THREE.DirectionalLight(0xffffff, 1.2);
-  key.position.set(4, 6, 6);
+  // Top Key Light
+  const key = new THREE.DirectionalLight(0xffffff, 1.5);
+  key.position.set(5, 8, 10);
   scene.add(key);
 
-  const fill = new THREE.DirectionalLight(0x88bbff, 0.5);
-  fill.position.set(-5, 1, 3);
+  // Cool Fill Light
+  const fill = new THREE.PointLight(0x00a2ff, 1.2, 20);
+  fill.position.set(-8, 2, 5);
   scene.add(fill);
 
-  const back = new THREE.DirectionalLight(0xff3344, 0.18);
-  back.position.set(0, -4, -5);
-  scene.add(back);
+  // Warm Rim Light
+  const rim = new THREE.PointLight(0xff5500, 1.5, 15);
+  rim.position.set(4, -5, 4);
+  scene.add(rim);
+
+  // Soft Purple Glow
+  const glow = new THREE.PointLight(0x9333ea, 0.8, 10);
+  glow.position.set(0, 0, -2);
+  scene.add(glow);
 }
