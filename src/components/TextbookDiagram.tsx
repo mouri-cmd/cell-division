@@ -50,7 +50,7 @@ function AnimalDiagram({ highlight, handleEnter, handleLeave, handleClick }: Inn
       <div className="relative w-full max-w-[850px] aspect-[800/600] px-4 md:px-12">
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none animate-float">
            <div className="animate-breathe w-full h-full flex items-center justify-center">
-             <img src={animalCellImg} alt="3D Animal Cell" className="w-[60%] md:w-full h-[60%] md:h-full object-contain brightness-[1.02]" />
+            <img src={animalCellImg} alt="3D Animal Cell" className="w-full h-full object-contain brightness-[1.02]" />
            </div>
         </div>
 
@@ -93,7 +93,7 @@ function PlantDiagram({ highlight, handleEnter, handleLeave, handleClick }: Inne
       <div className="relative w-full max-w-[850px] aspect-[800/600] px-4 md:px-12">
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none animate-float">
           <div className="animate-breathe w-full h-full flex items-center justify-center">
-            <img src={plantCellImg} alt="3D Plant Cell" className="w-[60%] md:w-full h-[60%] md:h-full object-contain brightness-[1.05]" />
+            <img src={plantCellImg} alt="3D Plant Cell" className="w-full h-full object-contain brightness-[1.05]" />
           </div>
         </div>
 

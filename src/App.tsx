@@ -8,8 +8,9 @@ import OrganelleCard from './components/OrganelleCard';
 import GuidedTour from './components/GuidedTour';
 import HelpModal from './components/HelpModal';
 import { useSimStore } from './store/simStore';
-import { ORGANELLES, ORGANELLE_MAP } from './data/organelles';
+import { ORGANELLES } from './data/organelles';
 import { PlayCircle, HelpCircle } from 'lucide-react';
+import FeedbackCTA from './components/FeedbackCTA';
 
 type CellView = 'both' | 'plant' | 'animal';
 
@@ -147,6 +148,7 @@ export default function App() {
         onStartTour={() => setShowTour(true)}
         onSelectView={(view) => setCellView(view)}
       />
+      <FeedbackCTA simulationName="cell-structure" />
     </div>
   );
 }
@@ -196,5 +198,3 @@ function LegendPanel({
     </div>
   );
 }
-
-

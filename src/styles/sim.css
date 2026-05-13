@@ -1040,3 +1040,52 @@
   .first-tip, .hover-tooltip { animation: none; }
 }
 
+
+/* ── Feedback CTA ── */
+.feedback-cta {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px;
+  background: rgba(11, 17, 23, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--r-pill);
+  color: #fff;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+  z-index: 50;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  white-space: nowrap;
+}
+
+.feedback-cta:hover {
+  background: rgba(11, 17, 23, 0.95);
+  transform: translateY(-4px) scale(1.02);
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.4);
+}
+
+.feedback-cta:active {
+  transform: translateY(-2px) scale(0.98);
+}
+
+.feedback-cta__text {
+  font-family: var(--font-bangla);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+@media (max-width: 640px) {
+  .feedback-cta {
+    bottom: 16px;
+    right: 16px;
+    padding: 12px;
+  }
+  .feedback-cta__text {
+    display: none;
+  }
+}
