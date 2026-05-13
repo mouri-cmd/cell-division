@@ -5,6 +5,7 @@ import { useSimStore } from '../store/simStore';
 import { createScene, createCamera, createRenderer, createLights } from '../three/CellScene';
 import { buildPlantCell, buildAnimalCell } from '../three/OrganelleMeshes';
 import TextbookLabels from './TextbookLabels';
+import { translations } from '../data/translations';
 
 interface SceneState {
   renderer?: THREE.WebGLRenderer;
@@ -25,7 +26,8 @@ export default function SimCanvas() {
     mouse: new THREE.Vector2(),
   });
 
-  const { cellView, selectedOrganelle, setSelectedOrganelle, setHoveredOrganelle } = useSimStore();
+  const { cellView, selectedOrganelle, setSelectedOrganelle, setHoveredOrganelle, language } = useSimStore();
+  const t = translations[language];
 
   // Init
   useEffect(() => {
@@ -156,13 +158,12 @@ export default function SimCanvas() {
         )}
       </div>
 
-      {/* Dynamic Title based on view */}
       <div className="absolute top-10 left-1/2 -translate-x-1/2 text-center pointer-events-none">
         <h2 className="text-4xl font-black text-slate-800 tracking-tight">
-          {cellView === 'plant' ? 'উদ্ভিদ কোষ' : cellView === 'animal' ? 'প্রাণী কোষ' : 'উদ্ভিদ ও প্রাণী কোষ'}
+          {cellView === 'plant' ? t.plantCell : cellView === 'animal' ? t.animalCell : t.bothCells}
         </h2>
         <p className="text-slate-400 font-bold uppercase tracking-[0.2em] text-xs">
-          Interactive 360° 3D Models
+          {t.interactive3d}
         </p>
       </div>
     </div>

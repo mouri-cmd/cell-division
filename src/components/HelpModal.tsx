@@ -1,6 +1,9 @@
 import React from 'react';
 import { X, GraduationCap, Leaf, Bug, Play } from 'lucide-react';
 
+import { useSimStore } from '../store/simStore';
+import { translations } from '../data/translations';
+
 interface Props {
   isOpen: boolean;
   onClose: () => void;
@@ -9,6 +12,9 @@ interface Props {
 }
 
 export default function HelpModal({ isOpen, onClose, onStartTour, onSelectView }: Props) {
+  const { language } = useSimStore();
+  const t = translations[language];
+
   if (!isOpen) return null;
 
   return (
@@ -30,15 +36,15 @@ export default function HelpModal({ isOpen, onClose, onStartTour, onSelectView }
           
           <div className="flex items-center gap-3 mb-2">
             <GraduationCap className="text-red-500" size={24} />
-            <h2 className="text-lg md:text-xl font-bold bn">সিমুলেশন গাইড</h2>
+            <h2 className="text-lg md:text-xl font-bold bn">{t.helpGuide}</h2>
           </div>
-          <h1 className="text-xl md:text-2xl font-black bn">কোষ সিমুলেটরে স্বাগতম!</h1>
+          <h1 className="text-xl md:text-2xl font-black bn">{t.welcome}</h1>
         </div>
 
         {/* Body */}
         <div className="p-6 md:p-8">
           <p className="text-slate-600 leading-relaxed mb-6 md:mb-8 bn text-sm md:text-lg">
-            এই সিমুলেটরটি ব্যবহার করে আপনি উদ্ভিদ ও প্রাণী কোষের গঠন এবং অঙ্গাণুসমূহ সম্পর্কে বিস্তারিত জানতে পারবেন। নিচের বাটনগুলো ব্যবহার করে সরাসরি নির্দিষ্ট কোষ দেখতে পারেন।
+            {t.simDescription}
           </p>
 
           <div className="space-y-3 md:space-y-4 mb-6 md:mb-8">
@@ -50,8 +56,8 @@ export default function HelpModal({ isOpen, onClose, onStartTour, onSelectView }
                 <Leaf size={24} />
               </div>
               <div>
-                <h4 className="font-black text-slate-800 text-base md:text-lg bn">উদ্ভিদ কোষ</h4>
-                <p className="text-emerald-600 text-xs md:text-sm bn font-bold">উদ্ভিদ কোষের গঠন দেখুন</p>
+                <h4 className="font-black text-slate-800 text-base md:text-lg bn">{t.plantCell}</h4>
+                <p className="text-emerald-600 text-xs md:text-sm bn font-bold">{t.viewPlantDetails}</p>
               </div>
             </button>
 
@@ -63,17 +69,17 @@ export default function HelpModal({ isOpen, onClose, onStartTour, onSelectView }
                 <Bug size={24} />
               </div>
               <div>
-                <h4 className="font-black text-slate-800 text-base md:text-lg bn">প্রাণী কোষ</h4>
-                <p className="text-blue-600 text-xs md:text-sm bn font-bold">প্রাণী কোষের গঠন দেখুন</p>
+                <h4 className="font-black text-slate-800 text-base md:text-lg bn">{t.animalCell}</h4>
+                <p className="text-blue-600 text-xs md:text-sm bn font-bold">{t.viewAnimalDetails}</p>
               </div>
             </button>
           </div>
 
           <button 
             onClick={() => { onClose(); onStartTour(); }}
-            className="w-full py-4 md:py-5 bg-[#0f172a] text-white rounded-xl md:rounded-[1.5rem] font-black text-base md:text-lg hover:bg-slate-800 transition-all hover:scale-[1.02] active:scale-95 shadow-xl shadow-slate-200 bn flex items-center justify-center gap-2"
+            className="w-full py-4 md:py-5 bg-[#0f172a] text-white rounded-xl md:rounded-[.5rem] font-black text-base md:text-lg hover:bg-slate-800 transition-all hover:scale-[1.02] active:scale-95 shadow-xl shadow-slate-200 bn flex items-center justify-center gap-2"
           >
-            সিমুলেশন শুরু করুন
+            {t.startSimulation}
           </button>
         </div>
       </div>

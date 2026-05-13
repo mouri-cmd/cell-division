@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { X, ChevronRight, ChevronLeft } from 'lucide-react';
+import { useSimStore } from '../store/simStore';
+import { translations } from '../data/translations';
 
 interface TourStep {
   title: string;
@@ -8,43 +10,41 @@ interface TourStep {
   position: 'bottom' | 'top' | 'left' | 'right' | 'center';
 }
 
-const TOUR_STEPS: TourStep[] = [
-  {
-    title: 'স্বাগতম!',
-    description: 'উদ্ভিদ ও প্রাণী কোষের তুলনা সিমুলেটরে আপনাকে স্বাগতম। এই টিউটোরিয়ালটি আপনাকে সিমুলেটরটি ব্যবহার করতে সাহায্য করবে।',
-    position: 'center',
-  },
-  {
-    title: 'কোষ নির্বাচন করুন',
-    description: 'উদ্ভিদ এবং প্রাণী কোষের মধ্যে পরিবর্তন করতে এই মেনুটি ব্যবহার করুন।',
-    targetId: 'view-toggle-tour',
-    position: 'bottom',
-  },
-  {
-    title: 'অর্গানেল তালিকা',
-    description: 'সকল অর্গানেলের বিস্তারিত তালিকা দেখতে এখানে ক্লিক করুন।',
-    targetId: 'legend-btn-tour',
-    position: 'bottom',
-  },
-  {
-    title: 'কোষের অংশ দেখুন',
-    description: 'ছবির বিভিন্ন অংশে ক্লিক করে অর্গানেল সম্পর্কে জানুন।',
-    targetId: 'diagram-area-tour',
-    position: 'center',
-  },
-  {
-    title: 'শুরু করি!',
-    description: 'এখন আপনি নিজেই সিমুলেটরটি এক্সপ্লোর করতে পারেন।',
-    position: 'center',
-  },
-];
-
-interface Props {
-  isOpen: boolean;
-  onClose: () => void;
-}
-
 export default function GuidedTour({ isOpen, onClose }: Props) {
+  const { language } = useSimStore();
+  const t = translations[language];
+
+  const TOUR_STEPS: TourStep[] = [
+    {
+      title: t.tour.welcome.title,
+      description: t.tour.welcome.desc,
+      position: 'center',
+    },
+    {
+      title: t.tour.selectCell.title,
+      description: t.tour.selectCell.desc,
+      targetId: 'view-toggle-tour',
+      position: 'bottom',
+    },
+    {
+      title: t.tour.list.title,
+      description: t.tour.list.desc,
+      targetId: 'legend-btn-tour',
+      position: 'bottom',
+    },
+    {
+      title: t.tour.diagram.title,
+      description: t.tour.diagram.desc,
+      targetId: 'diagram-area-tour',
+      position: 'center',
+    },
+    {
+      title: t.tour.finish.title,
+      description: t.tour.finish.desc,
+      position: 'center',
+    },
+  ];
+
   const [currentStep, setCurrentStep] = useState(0);
   const [targetRect, setTargetRect] = useState<DOMRect | null>(null);
   const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
@@ -194,7 +194,7 @@ export default function GuidedTour({ isOpen, onClose }: Props) {
         
         <div className="p-7 md:p-8">
           <div className="inline-block bg-red-50 text-red-500 text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-md mb-4">
-            Step {currentStep + 1} of {TOUR_STEPS.length}
+            {t.step} {currentStep + 1} {t.of} {TOUR_STEPS.length}
           </div>
 
           <h3 className="text-xl font-black text-slate-800 mb-2 bn">{step.title}</h3>
@@ -212,9 +212,9 @@ export default function GuidedTour({ isOpen, onClose }: Props) {
 
             <button 
               onClick={handleNext}
-              className="flex-1 flex items-center justify-center gap-2 py-3.5 bg-[#0f172a] text-white rounded-2xl font-bold hover:bg-slate-800 transition-all active:scale-95 shadow-lg shadow-slate-200 bn text-base"
+              className="flex-1 flex items-center justify-center gap-2 py-3.5 bg-[#0f172a] text-white rounded-2xl font-bold hover:bg-slate-800 transition-all active:scale-95 shadow-xl shadow-slate-200 bn text-base"
             >
-              {currentStep === TOUR_STEPS.length - 1 ? 'শুরু করি' : 'পরবর্তী'} 
+              {currentStep === TOUR_STEPS.length - 1 ? t.start : t.next} 
               <ChevronRight size={20} />
             </button>
           </div>

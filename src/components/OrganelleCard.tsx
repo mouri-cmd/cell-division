@@ -2,10 +2,12 @@ import { useEffect } from 'react';
 import { X, Leaf, Bug } from 'lucide-react';
 import { ORGANELLE_MAP } from '../data/organelles';
 import { useSimStore } from '../store/simStore';
+import { translations } from '../data/translations';
 
 export default function OrganelleCard() {
-  const { selectedOrganelle, setSelectedOrganelle } = useSimStore();
+  const { selectedOrganelle, setSelectedOrganelle, language } = useSimStore();
   const organelle = selectedOrganelle ? ORGANELLE_MAP.get(selectedOrganelle) : null;
+  const t = translations[language];
 
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
@@ -45,8 +47,8 @@ export default function OrganelleCard() {
                   aria-hidden="true"
                 />
                 <div>
-                  <h2 className="organelle-name bn">{organelle.nameBn}</h2>
-                  <span className="organelle-name-en">{organelle.nameEn}</span>
+                  <h2 className="organelle-name bn">{language === 'bn' ? organelle.nameBn : organelle.nameEn}</h2>
+                  {language === 'bn' && <span className="organelle-name-en">{organelle.nameEn}</span>}
                 </div>
               </div>
               <button
@@ -59,18 +61,18 @@ export default function OrganelleCard() {
             </div>
 
             <div className="mb-4">
-              <strong className="text-slate-800 text-sm font-black mb-2 block">বিবরণ:</strong>
+              <strong className="text-slate-800 text-sm font-black mb-2 block">{language === 'bn' ? 'বিবরণ:' : 'Description:'}</strong>
               <ul className="list-disc pl-5 text-slate-600 space-y-1.5 text-sm">
-                {organelle.description.map((desc, i) => (
+                {(language === 'bn' ? organelle.descriptionBn : organelle.descriptionEn).map((desc, i) => (
                   <li key={i}>{desc}</li>
                 ))}
               </ul>
             </div>
 
             <div className="mb-6">
-              <strong className="text-slate-800 text-sm font-black mb-2 block">কাজ:</strong>
+              <strong className="text-slate-800 text-sm font-black mb-2 block">{language === 'bn' ? 'কাজ:' : 'Function:'}</strong>
               <ul className="list-disc pl-5 text-slate-600 space-y-1.5 text-sm">
-                {organelle.function.map((fn, i) => (
+                {(language === 'bn' ? organelle.functionBn : organelle.functionEn).map((fn, i) => (
                   <li key={i}>{fn}</li>
                 ))}
               </ul>
@@ -79,11 +81,11 @@ export default function OrganelleCard() {
             <div className="organelle-present">
               <div className={`present-tag ${organelle.presentIn.includes('plant') ? 'present-tag--yes' : 'present-tag--no'}`}>
                 <Leaf size={11} />
-                উদ্ভিদ কোষ
+                {t.plantCell}
               </div>
               <div className={`present-tag ${organelle.presentIn.includes('animal') ? 'present-tag--yes' : 'present-tag--no'}`}>
                 <Bug size={11} />
-                প্রাণী কোষ
+                {t.animalCell}
               </div>
             </div>
             </div>
